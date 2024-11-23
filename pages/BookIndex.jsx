@@ -1,10 +1,40 @@
 
 import { bookService } from "../services/book.service.js"
+import { BookList } from "../cmps/BookList.jsx"
+import { BookFilter } from "../cmps/BookFilter.jsx"
+
+
 const { useEffect, useState } = React
 
 export function BookIndex() {
 
-    const [books, setBooks] = useState(null)
+ const [books, setBooks] = useState(null)
+ const [filterBy, setFilterBy] = useState(bookService.getDefaultFilter())
+
+ useEffect(() => {
+    console.log('Effect triggered with filterBy:', filterBy);
+    loadBooks();
+}, [filterBy]);
+
+
+function loadBooks() {
+    console.log('Filter criteria:', filterBy);  // Log filterBy to ensure it's correct
+    bookService.query(filterBy)
+        .then(books => {
+            console.log('Loaded books:', books);
+            setBooks(books);
+        })
+        .catch(err => {
+            console.log('Problems getting books:', err);
+        });
+}
+
+
+function onSetFilter(filterBy) {
+     console.log('filterBy:', filterBy)
+    setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
+}
+
 
 function onRemoveBook(bookId) {
         bookService.remove(bookId)
@@ -17,13 +47,14 @@ function onRemoveBook(bookId) {
     }
 
 if (!books) return <div>Loading...</div>
-
+console.log(books)
     return (
-        <section className="car-index">
-          
-            <CarList
+        <section className="book-index">
+            <BookFilter defaultFilter={filterBy} onSetFilter={onSetFilter} />
+
+            <BookList
                 books={books}
-                onRemoveCar={onRemoveBook}
+                onRemoveBook={onRemoveBook}
             />
         </section>
     )

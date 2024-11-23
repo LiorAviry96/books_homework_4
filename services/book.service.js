@@ -3,7 +3,7 @@ import { storageService } from './async-storage.service.js'
 
 
 const BOOK_KEY = 'bookDB'
-//_createCars()
+_createBooks()
 
 export const bookService = {
     remove,
@@ -13,24 +13,31 @@ export const bookService = {
     getDefaultFilter,
     getEmptyBook,
 }
+
 function query(filterBy = {}) {
-    return storageService.query(CAR_KEY)
-        .then(cars => {
-            // Filter by name (title)
-            if (filterBy.txt) {
+    return storageService.query(BOOK_KEY)
+        .then(books => {
+            console.log('Raw books from storage:', books);
+
+            if (filterBy.txt && filterBy.txt.trim() !== "") {
                 const regExp = new RegExp(filterBy.txt, 'i');
-                cars = cars.filter(car => regExp.test(car.title)); // Changed 'vendor' to 'title'
+                books = books.filter(book => regExp.test(book.title));
+                console.log('Books after txt filter:', books);
             }
-            // Filter by price (listPrice.amount)
-            if (filterBy.minPrice) {
-                cars = cars.filter(car => car.listPrice.amount >= filterBy.minPrice);
+            if(filterBy.minPrice !== 0 && filterBy.maxPrice){
+                books = books.filter(book => {
+                    const price = parseFloat(book.price);
+                    return !isNaN(price) && price >= (filterBy.minPrice || 0) && price <= (filterBy.maxPrice || Infinity);
+                });
             }
-            if (filterBy.maxPrice) {
-                cars = cars.filter(car => car.listPrice.amount <= filterBy.maxPrice);
-            }
-            return cars;
+            
+
+            console.log('Books after price filter:', books); // Log after applying price filter
+            return books;
         });
 }
+
+
 
 
 function remove(bookId) {
@@ -83,40 +90,60 @@ function getEmptyBook() {
         thumbnail: '',
         language: 'en',
         listPrice: {
-            amount: 0,
+            amount: 10,
             currencyCode: 'USD',
             isOnSale: false
         }
     };
 }
 
-function _createBook(idx) {
-    const ctgs = ['Love', 'Fiction', 'Poetry', 'Computers', 'Religion'];
-    return {
-        id: utilService.makeId(),
-        title: utilService.makeLorem(2),
-        subtitle: utilService.makeLorem(4),
-        authors: [utilService.makeLorem(1)],
-        publishedDate: utilService.getRandomIntInclusive(1950, 2024),
-        description: utilService.makeLorem(20),
-        pageCount: utilService.getRandomIntInclusive(20, 600),
-        categories: [ctgs[utilService.getRandomIntInclusive(0, ctgs.length - 1)]],
-        thumbnail: `http://coding-academy.org/books-photos/${idx + 1}.jpg`,
-        language: 'en',
-        listPrice: {
-            amount: utilService.getRandomIntInclusive(80, 500),
-            currencyCode: 'EUR',
-            isOnSale: Math.random() > 0.7
-        }
-    };
-}
 
 function _createBooks() {
-    const books = [];
-    const numBooks = 20; // Number of books to create
-    for (let i = 0; i < numBooks; i++) {
-        books.push(_createBook(i));
+    let books = loadFromStorage(BOOK_KEY);
+    if (!books || !books.length) {
+        books = [
+            _createBook(
+                "metus hendrerit",
+                "mi est eros convallis auctor arcu dapibus himenaeos",
+                ["Barbara Cartland"],
+                1999,
+                "placerat nisi sodales suscipit tellus tincidunt mauris elit sit luctus interdum ad dictum platea vehicula conubia fermentum habitasse congue suspendisse",
+                713,
+                ["Computers", "Hack"],
+                "http://coding-academy.org/books-photos/20.jpg",
+                "en",
+                { amount: 109, currencyCode: "EUR", isOnSale: false }
+            ),
+            _createBook(
+                "morbi",
+                "lorem euismod dictumst inceptos mi",
+                ["Barbara Cartland"],
+                1978,
+                "aliquam pretium lorem laoreet etiam odio cubilia iaculis placerat aliquam tempor nisl auctor",
+                129,
+                ["Computers", "Hack"],
+                "http://coding-academy.org/books-photos/14.jpg",
+                "sp",
+                { amount: 44, currencyCode: "EUR", isOnSale: true }
+            )
+        ];
+        saveToStorage(BOOK_KEY, books);
     }
-    storageService.save('BOOKS_DB', books); // Save books to local storage
-    return books;
+}
+
+function _createBook(title, subtitle, authors, publishedDate, description, pageCount, categories, thumbnail, language, listPrice) {
+    const book = {
+        id: makeId(),
+        title,
+        subtitle,
+        authors,
+        publishedDate,
+        description,
+        pageCount,
+        categories,
+        thumbnail,
+        language,
+        listPrice
+    };
+    return book;
 }
