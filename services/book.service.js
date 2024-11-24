@@ -48,6 +48,7 @@ function remove(bookId) {
 function get(bookId) {
     return storageService.get(BOOK_KEY, bookId)
         .then(_setNextPrevBookId)
+      
 }
 
 function _setNextPrevBookId(book) {
