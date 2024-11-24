@@ -47,15 +47,18 @@ export function BookEdit() {
     }
 
 
-    const { title, price } = bookToEdit
+    const { title, price , author} = bookToEdit
     return (
         <section className="book-edit">
             <h1>{bookId ? 'Edit' : 'Add'} Book</h1>
             <form onSubmit={onSaveBook}>
-                <label htmlFor="vendor">Title</label>
+                <label htmlFor="title">Title</label>
                 <input onChange={handleChange} value={title} type="text" name="title" id="title" />
 
-                <label htmlFor="speed">Price</label>
+                <label htmlFor="author">Title</label>
+                <input onChange={handleChange} value={author} type="text" name="author" id="author" />
+
+                <label htmlFor="price">Price</label>
                 <input onChange={handleChange} value={price} type="number" name="price" id="price" />
                 <button>Save</button>
             </form>

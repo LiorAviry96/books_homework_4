@@ -26,8 +26,8 @@ export function BookDetails() {
         // navigate(-1)
     }
 
-   console.log('book details:', book)
-    //console.log('params.bookId', params.bookId)
+   //console.log('book details:', book)
+   // console.log('params.bookId', params.bookId)
    // console.log('Books in localStorage:', JSON.parse(localStorage.getItem('bookDB')));
    
     if (!book) return <div>Details Loading...</div>
@@ -35,7 +35,7 @@ export function BookDetails() {
         <section className="book-details">
            <h2>Title: {book.title}</h2>
          <h4>Price: {book.listPrice.amount} {book.listPrice.currencyCode}</h4>
-        <img src={book.thumbnail} alt={`Cover of the book ${book.title}`} />
+        <img  src={`../assets/img/${book.thumbnail}.jpg`}alt={`Cover of the book ${book.title}`} />
             <button onClick={onBack}>Back</button>
             <section>
                 <button><Link to={`/book/${book.prevBookId}`}>Prev Book</Link></button>

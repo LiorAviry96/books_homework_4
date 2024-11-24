@@ -17,12 +17,12 @@ export const bookService = {
 function query(filterBy = {}) {
     return storageService.query(BOOK_KEY)
         .then(books => {
-            console.log('Raw books from storage:', books);
+            //console.log('Raw books from storage:', books);
 
             if (filterBy.txt && filterBy.txt.trim() !== "") {
                 const regExp = new RegExp(filterBy.txt, 'i');
                 books = books.filter(book => regExp.test(book.title));
-                console.log('Books after txt filter:', books);
+             //   console.log('Books after txt filter:', books);
             }
             if(filterBy.minPrice !== 0 && filterBy.maxPrice){
                 books = books.filter(book => {
@@ -32,7 +32,7 @@ function query(filterBy = {}) {
             }
             
 
-            console.log('Books after price filter:', books); // Log after applying price filter
+          //  console.log('Books after price filter:', books); // Log after applying price filter
             return books;
         });
 }
@@ -111,7 +111,7 @@ function _createBooks() {
                 "placerat nisi sodales suscipit tellus tincidunt mauris elit sit luctus interdum ad dictum platea vehicula conubia fermentum habitasse congue suspendisse",
                 713,
                 ["Computers", "Hack"],
-                "http://coding-academy.org/books-photos/20.jpg",
+                "1",
                 "en",
                 { amount: 109, currencyCode: "EUR", isOnSale: false }
             ),
@@ -123,7 +123,7 @@ function _createBooks() {
                 "aliquam pretium lorem laoreet etiam odio cubilia iaculis placerat aliquam tempor nisl auctor",
                 129,
                 ["Computers", "Hack"],
-                "http://coding-academy.org/books-photos/14.jpg",
+                "2",
                 "sp",
                 { amount: 44, currencyCode: "EUR", isOnSale: true }
             )
