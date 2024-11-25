@@ -206,7 +206,19 @@ a.active {
 	text-decoration: underline;
 }
 
+.price-high {
+    color: red !important;
+    font-weight: bold;
+}
 
+.price-low {
+    color: green !important;
+    font-weight: bold;
+}
+.sale{
+	color: red;
+	font-weight: bold;
+}
 @media (max-width: 720px) {
 	.app-header {
 		color: var(--clr2bg-light);
