@@ -34,13 +34,15 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+p {
 	margin: .5em 0 .5em;
 	font-family: 'Edu VIC WA NT Beginner', cursive;
 }
 
 p {
 	margin: 0 0 1em;
+	font-size: 20px;
 }
 
 a {
@@ -68,32 +70,253 @@ object {
 .about nav a {
 	margin-right: 10px;
 }
+.about h1{
+	padding-top: 10px;
+	font-size: 35px;
+}
+.about p{
+	font-size: 25px;
+}
 
 button {
 	cursor: pointer;
 	background-color: var(--clr2bg);
 	margin: 0.5em;
 	border: 0;
-	padding: 0.5em 0.8em;
+	padding: 5px 20px;
 	border-radius: 4px;
+	font-size: 15px;
+	font-family: 'Edu VIC WA NT Beginner', cursive;
+
 }
+.add-button{
+    margin: 0 auto;
+    align-items: center;
+    display: grid;
+}
+.book-index{
+	display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    
+}
+.book-index .book-filter {
+    grid-row: 1;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.book-index section:nth-of-type(2) {
+    grid-row: 2;
+    text-align: right;
+    margin-bottom: 1rem;
+}
+
+.book-index a:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.book-index a {
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+
+}
+.book-edit label{
+	display: block;
+}
+.book-edit button{
+	margin-top: 20px;
+	display: block;
+}
+
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    padding: 1rem 0;
+}
+/* General styles for BookDetails */
+.book-details {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 1rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-details h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.book-details h4 {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    color: #555;
+}
+
+.book-details p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
+    margin: 1rem 0;
+}
+
+/* Image styling */
+.book-details img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1rem auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sale and price styles */
+.book-details .sale {
+    color: #d9534f;
+    font-weight: bold;
+    margin-left: 0.5rem;
+}
+
+.book-details span {
+    font-size: 1.2rem;
+}
+
+.book-details .price-high {
+    color: red;
+}
+
+.book-details .price-low {
+    color: green;
+}
+
+/* Buttons */
+.book-details button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 0.5rem;
+}
+
+.book-details button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.book-details button a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Navigation section */
+.book-details section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.book-details section button {
+    flex: 1;
+    margin: 0 0.5rem;
+}
+
+
+
+
+/* Individual BookPreview styles */
+.book-preview {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+}
+
+
+.book-preview h2,
+.book-preview h3,
+.book-preview h4 {
+    margin: 0.5rem 0;
+}
+
+.book-preview img {
+    grid-row: 1;
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #ddd;
+}
+
+.button-add{
+	border: 1px solid black;
+	padding-top: 10px;
+}
+/* Price styles */
+.book-preview .price-high {
+    color: red;
+    font-weight: bold;
+}
+
+.book-preview .price-low {
+    color: green;
+    font-weight: bold;
+}
+
+.book-preview .sale {
+    color: #d9534f;
+    font-weight: bold;
+}
+
+
 
 button:hover {
 	background-color: var(--clr2);
 	color: white;
 	transition: 0.3s;
 }
-
+input{
+	font-size: 18px;
+	border-radius: 5px;
+}
 input:focus {
 	background-color: var(--clr1bg);
 	transition: background-color 1s;
 }
 
-
-/* Helpers */
-
-/* flex helpers */
-
+label{
+	font-family: 'Edu VIC WA NT Beginner', cursive;
+	font-size: 20px;
+	padding-right: 10px;
+	padding-left: 5px;
+	font-weight: bold;
+}
+.book-filter h2{
+	font-size: 30px;
+	padding-top: 10px;
+}
 .flex {
 	display: flex;
 }
@@ -171,11 +394,11 @@ input:focus {
 }
 
 
-
-/* Components */
-
-.home {
-	font-size: 1em;
+.home{
+	font-size: 30px;
+	display: grid;
+    justify-items: center;
+    align-items: center;
 }
 
 .app-header {
@@ -219,8 +442,47 @@ a.active {
 	color: red;
 	font-weight: bold;
 }
-@media (max-width: 720px) {
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .book-index {
+        padding: 1rem;
+    }
+
+    .book-list {
+        grid-template-columns: 1fr;
+    }
+
+    .book-preview {
+        grid-template-rows: auto auto auto;
+    }
 	.app-header {
 		color: var(--clr2bg-light);
 	}
+
+    .book-details {
+        padding: 1.5rem;
+    }
+
+    .book-details h2 {
+        font-size: 1.8rem;
+    }
+
+    .book-details h4 {
+        font-size: 1rem;
+    }
+
+    .book-details button {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .book-details section button {
+        margin: 0.5rem 0;
+    }
+
+    .book-details section {
+        flex-direction: column;
+        align-items: center;
+    }
 }

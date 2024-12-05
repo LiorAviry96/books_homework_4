@@ -38,12 +38,19 @@ export function BookDetails() {
     };
 
     const getBookAgeCategory = () => {
-        const currentYear = new Date().getFullYear();
-        const bookAge = currentYear - book.publishedDate;
-        if (book.bookAge > 10) return 'Vintage';
-        if (book.bookAge < 1) return 'New';
-        return ''; // Default case
-    };
+        if (!book) return "";
+    const publishedDate = new Date(book.publishedDate);
+    const currentDate = new Date();
+    const yearsDifference =
+      (currentDate - publishedDate) / (1000 * 60 * 60 * 24 * 365);
+    if (yearsDifference > 10) {
+      return "Vintage";
+    } else if (yearsDifference < 1) {
+      return "New";
+    }
+    return "";
+  }
+
    //console.log('book details:', book)
    // console.log('params.bookId', params.bookId)
    // console.log('Books in localStorage:', JSON.parse(localStorage.getItem('bookDB')));
@@ -60,11 +67,11 @@ export function BookDetails() {
                 </span>
          </h4>
          <h4>Page Count: {book.pageCount}</h4>
-         <h4>Publish Date: {book.publishedDate}</h4>
          <h4>Page Count: {book.pageCount}</h4>
             <h4>Reading Level: {getReadingLevel()}</h4>
             <h4>Publish Date: {book.publishedDate}</h4>
             <h4>Book Age: {getBookAgeCategory()}</h4>
+            <p>Description: {book.description}</p>
         <img  src={`../assets/img/${book.thumbnail}.jpg`}alt={`Cover of the book ${book.title}`} />
             <button onClick={onBack}>Back</button>
             <section>

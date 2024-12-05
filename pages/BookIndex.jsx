@@ -53,7 +53,7 @@ if (!books) return <div>Loading...</div>
         <section className="book-index">
             <BookFilter defaultFilter={filterBy} onSetFilter={onSetFilter} />
             <section>
-                <Link to="/book/edit">Add Book</Link>
+                <Link className="button-add" to="/book/edit">Add Book</Link>
             </section>
             <BookList
                 books={books}

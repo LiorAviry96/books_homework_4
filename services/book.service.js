@@ -80,18 +80,17 @@ function getDefaultFilter() {
 
 function getEmptyBook() {
     return {
-        id: '', 
         title: '',
         subtitle: '',
         authors: [],
-        publishedDate: null,
+        publishedDate: '',
         description: '',
         pageCount: 0,
         categories: [],
         thumbnail: '',
-        language: 'en',
+        language: '',
         listPrice: {
-            amount: 10,
+            amount: 0,
             currencyCode: 'USD',
             isOnSale: false
         }
@@ -126,13 +125,37 @@ function _createBooks() {
                 "2",
                 "sp",
                 { amount: 44, currencyCode: "EUR", isOnSale: true }
-            )
+            ),
+            _createBook(
+                "at viverra venenatis",
+                "gravida libero facilisis rhoncus urna etiam",
+                ["Barbara Cartland"],
+                2000,
+                "lorem molestie ut euismod ad quis mi ultricies nisl cursus suspendisse dui tempor sit suscipit metus etiam euismod tortor sagittis habitant",
+                145,
+                ["Computers", "Hack"],
+                "3",
+                "sp",
+                { amount: 404, currencyCode: "ILS", isOnSale: true }
+            ),
+            _createBook(
+                "tristique",
+                "gravida libero facilisis rhoncus urna etiam",
+                ["Dr. Seuss"],
+                2002,
+                "magna quisque venenatis laoreet purus in semper habitant proin pellentesque sed egestas cursus faucibus nam enim id sit mi ligula risus curabitur senectus curabitur sodales fames sem",
+                253,
+                ["Computers", "Hack"],
+                "4",
+                "he",
+                { amount: 174, currencyCode: "ILS", isOnSale: false }
+            ),
         ];
         saveToStorage(BOOK_KEY, books);
     }
 }
 
-function _createBook(title, subtitle, authors, publishedDate, description, pageCount, categories, thumbnail, language, listPrice) {
+function _createBook(title, subtitle, authors, publishedDate, description, pageCount, categorie, thumbnail, language, listPrice) {
     const book = {
         id: makeId(),
         title,
@@ -141,7 +164,7 @@ function _createBook(title, subtitle, authors, publishedDate, description, pageC
         publishedDate,
         description,
         pageCount,
-        categories,
+        categorie,
         thumbnail,
         language,
         listPrice
