@@ -2,6 +2,7 @@
 import { bookService } from "../services/book.service.js"
 import { BookList } from "../cmps/BookList.jsx"
 import { BookFilter } from "../cmps/BookFilter.jsx"
+import { AddBook } from "../cmps/AddBook.jsx"
 
 const { Link } = ReactRouterDOM
 
@@ -36,6 +37,9 @@ function onSetFilter(filterBy) {
     setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
 }
 
+function onAddBook(newBook) {
+    setBooks((prevBooks) => [...prevBooks, newBook]);
+}
 
 function onRemoveBook(bookId) {
         bookService.remove(bookId)
@@ -59,6 +63,7 @@ if (!books) return <div>Loading...</div>
                 books={books}
                 onRemoveBook={onRemoveBook}
             />
+            <AddBook handleAddBook={onAddBook}/>
         </section>
     )
 }

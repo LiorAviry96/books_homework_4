@@ -13,8 +13,8 @@ export const bookService = {
     getDefaultFilter,
     getEmptyBook,
     addReview,
-    removeReview
-
+    removeReview,
+    addGoogleBook
 }
 
 async function query(filterBy = {}) {
@@ -82,8 +82,6 @@ async function query(filterBy = {}) {
 
 
 
-
-
 function remove(bookId) {
     // return Promise.reject('Oh No!')
     return storageService.remove(BOOK_KEY, bookId)
@@ -140,12 +138,52 @@ function getEmptyBook() {
         }
     };
 }
+
+
 export function addReview(bookId, review) {
     return get(bookId).then((book) => {
         if (!book.reviews) book.reviews = []; // Initialize reviews if not present
         book.reviews.push(review); // Add the new review to the reviews array
         return save(book); // Save the updated book object back to the storage
     });
+}
+
+
+export function addGoogleBook(googleBook){
+    console.log('start adding')
+    const formattedBook = {
+        id: googleBook.id,
+        title: googleBook.volumeInfo.title || '',
+        subtitle: googleBook.volumeInfo.subtitle || '',
+        authors: googleBook.volumeInfo.authors || [],
+        publishedDate: googleBook.volumeInfo.publishedDate || '',
+        description: googleBook.volumeInfo.description || '',
+        pageCount: googleBook.volumeInfo.pageCount || 0,
+        categories: googleBook.volumeInfo.categories || [],
+        thumbnail: googleBook.volumeInfo.imageLinks.thumbnail || '',
+        language: googleBook.volumeInfo.language || '',
+        listPrice: {
+            amount: 0, // Default price since Google Books API doesn't provide pricing
+            currencyCode: 'USD',
+            isOnSale: false,
+        },
+        reviews: [], // Initialize reviews as an empty array
+    };
+    console.log(formattedBook)
+   // Retrieve existing books
+   return storageService.query(BOOK_KEY)
+   .then((books) => {
+       books = books || [];
+       books.push(formattedBook); // Append the new book
+       saveToStorage(BOOK_KEY, books); // Save the updated array
+       console.log('Book added successfully:', formattedBook);
+   })
+   .catch((err) => {
+       console.error('Failed to add book:', err);
+       throw err;
+   });
+    
+
 }
 
 export function removeReview(bookId, reviewId) {
