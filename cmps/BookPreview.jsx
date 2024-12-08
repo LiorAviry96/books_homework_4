@@ -1,11 +1,12 @@
+
 export function BookPreview({ book }) {
     const { title, authors, pageCount, publishedDate, thumbnail, listPrice } = book;
-
     function isOnSale(){
         if(listPrice.isOnSale === true){
             return ' -ON SALE'
         }
     }
+  
  
     return (
         <article className="book-preview">
@@ -20,6 +21,7 @@ export function BookPreview({ book }) {
                 </span>
             </h4>
             <h4>Page Count: {pageCount}</h4>
+          
             <img src={`../assets/img/${thumbnail}.jpg`} alt={`Cover of the book ${title}`} />
         </article>
     );

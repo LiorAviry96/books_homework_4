@@ -12,30 +12,74 @@ export const bookService = {
     query,
     getDefaultFilter,
     getEmptyBook,
+    addReview,
+    removeReview
+
 }
 
-function query(filterBy = {}) {
-    return storageService.query(BOOK_KEY)
-        .then(books => {
-            //console.log('Raw books from storage:', books);
+async function query(filterBy = {}) {
+    let books = await storageService.query(BOOK_KEY)
 
-            if (filterBy.txt && filterBy.txt.trim() !== "") {
-                const regExp = new RegExp(filterBy.txt, 'i');
-                books = books.filter(book => regExp.test(book.title));
-             //   console.log('Books after txt filter:', books);
-            }
-            if(filterBy.minPrice !== 0 && filterBy.maxPrice){
-                books = books.filter(book => {
-                    const price = parseFloat(book.price);
-                    return !isNaN(price) && price >= (filterBy.minPrice || 0) && price <= (filterBy.maxPrice || Infinity);
-                });
-            }
-            
 
-          //  console.log('Books after price filter:', books); // Log after applying price filter
-            return books;
-        });
+    if (filterBy.title) {
+        const regExp = new RegExp(filterBy.title, 'i')
+        books = books.filter((book) => regExp.test(book.title))
+    }
+
+
+    if (filterBy.subtitle) {
+        const regExp = new RegExp(filterBy.subtitle, 'i')
+        books = books.filter((book) => regExp.test(book.subtitle))
+    }
+
+
+    if (filterBy.authors) {
+        const regExp = new RegExp(filterBy.authors, 'i')
+        books = books.filter((book) =>
+            book.authors.some((author) => regExp.test(author))
+        )
+    }
+
+
+    if (filterBy.description) {
+        const regExp = new RegExp(filterBy.description, 'i')
+        books = books.filter((book) => regExp.test(book.description))
+    }
+
+
+    if (filterBy.categories) {
+        const regExp = new RegExp(filterBy.categories, 'i')
+        books = books.filter((book) =>
+            book.categories.some((category) => regExp.test(category))
+        )
+    }
+
+
+    if (filterBy.pageCount && !isNaN(filterBy.pageCount)) {
+        books = books.filter((book) => book.pageCount === +filterBy.pageCount)
+    }
+
+
+    if (filterBy.minPrice && !isNaN(filterBy.minPrice)) {
+        books = books.filter((book) => book.listPrice.amount >= +filterBy.minPrice)
+    }
+
+
+    if (filterBy.maxPrice && !isNaN(filterBy.maxPrice)) {
+        books = books.filter((book) => book.listPrice.amount <= +filterBy.maxPrice)
+    }
+
+
+    if (filterBy.isOnSale) {
+        books = books.filter(
+            (book) => book.listPrice.isOnSale === filterBy.isOnSale
+        )
+    }
+
+
+    return books
 }
+
 
 
 
@@ -95,6 +139,21 @@ function getEmptyBook() {
             isOnSale: false
         }
     };
+}
+export function addReview(bookId, review) {
+    return get(bookId).then((book) => {
+        if (!book.reviews) book.reviews = []; // Initialize reviews if not present
+        book.reviews.push(review); // Add the new review to the reviews array
+        return save(book); // Save the updated book object back to the storage
+    });
+}
+
+export function removeReview(bookId, reviewId) {
+    return get(bookId).then((book) => {
+        if (!book.reviews) return; // If no reviews, nothing to remove
+        book.reviews = book.reviews.filter((review) => review.id !== reviewId); // Remove the review
+        return save(book); // Save the updated book
+    });
 }
 
 
@@ -167,7 +226,8 @@ function _createBook(title, subtitle, authors, publishedDate, description, pageC
         categorie,
         thumbnail,
         language,
-        listPrice
+        listPrice,
+        reviews: [],
     };
     return book;
 }

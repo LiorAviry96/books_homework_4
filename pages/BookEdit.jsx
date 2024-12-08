@@ -7,20 +7,30 @@ const { useNavigate, useParams } = ReactRouterDOM
 export function BookEdit() {
 
     const [bookToEdit, setBookToEdit] = useState(bookService.getEmptyBook())
-    const navigate = useNavigate()
-    const { bookId } = useParams()
+    const navigate = useNavigate();
+    const params = useParams();
+    const bookId = params.bookid;
+
 
     useEffect(() => {
-        if (bookId) loadBook()
-    }, [])
+        if (bookId) {
+            loadBook(bookId);
+        }
+    }, [bookId]);
 
-    function loadBook() {
-        bookService.get(bookId)
-            .then(setBookToEdit)
-            .catch(err => {
-                console.log('Problem getting book', err);
-            })
+
+
+    function loadBook(bookid) {
+        bookService.get(bookid).then((myBook) => {
+            setBook({
+                ...myBook,
+                authors: myBook.authors.join(', '),
+                categories: myBook.categories.join(', '),
+            });
+            // setListPrice(myBook.listPrice);
+        });
     }
+
 
     function handleChange({ target }) {
         let { value, name: field } = target;
@@ -59,7 +69,7 @@ export function BookEdit() {
             [field]: value,
         }));
     }
-
+    
     function onSaveBook(ev) {
         ev.preventDefault()
         bookService.save(bookToEdit)
