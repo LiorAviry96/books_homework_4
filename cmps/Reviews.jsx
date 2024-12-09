@@ -1,4 +1,4 @@
-const { useState } = React
+//const { useState } = React
 
 export function Reviews({ reviews, removeReview }) {
 

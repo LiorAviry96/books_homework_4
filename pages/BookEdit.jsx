@@ -1,5 +1,6 @@
 
 import { bookService } from "../services/book.service.js"
+import { showErrorMsg } from "../services/event-bus.service.js"
 
 const { useState, useEffect } = React
 const { useNavigate, useParams } = ReactRouterDOM
@@ -26,8 +27,10 @@ export function BookEdit() {
                 ...myBook,
                 authors: myBook.authors.join(', '),
                 categories: myBook.categories.join(', '),
-            });
-            // setListPrice(myBook.listPrice);
+            }).catch(err => {
+                console.log('Problem getting book', err);
+                showErrorMsg('Problem getting book')
+            })
         });
     }
 

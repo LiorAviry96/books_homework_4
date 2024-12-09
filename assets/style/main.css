@@ -132,7 +132,7 @@ button:hover{
 .book-index .book-filter {
     grid-row: 1;
     background-color: #f8f9fa;
-    padding: 1rem;
+    padding: 1.5rem;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -300,10 +300,19 @@ button a {
     height: auto;
     border-bottom: 1px solid #ddd;
 }
+.book-index .add-button {
+    display: flex;
+    justify-content: center; /* Centers the button horizontally */
+    margin-bottom: 1rem;
+}
 
-.button-add{
-	border: 1px solid black;
-	padding-top: 10px;
+.button-add {
+    padding: 10px 20px; /* Adjust padding for consistent size */
+    background-color: rgb(103, 48, 73);
+    color: white; /* Optional: Button text color */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center; /* Centers text inside the button */
+
 }
 /* Price styles */
 .book-preview .price-high {
@@ -350,7 +359,7 @@ label{
 }
 .book-filter h2{
 	font-size: 30px;
-	padding-top: 10px;
+	
 }
 .book-filter form {
     display: grid;
@@ -379,6 +388,7 @@ label{
 .book-filter button {
     grid-column: span 2; /* Make the button span across both columns */
     justify-self: center; /* Center the button */
+    padding: 7px 40px;
 }
 
 .flex {
@@ -401,21 +411,15 @@ label{
 	align-items: center;
 }
 
-/* text helpers */
-
 .colored-text {
 	color: var(--clr1);
 }
-
-/* list helpers */
 
 .clean-list {
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
 }
-
-/* font awsome */
 
 .fa {
     font-family: "Atma", system-ui;
@@ -438,7 +442,7 @@ label{
 	content: "\f1b4";
 }
 
-/* Layout */
+
 .main-layout {
 	display: grid;
 	grid-template-columns: 1.6rem 1fr 1.6rem;
@@ -457,7 +461,6 @@ label{
 	padding: 1em;
 	margin: auto;
 }
-
 
 .home{
 	font-size: 30px;
@@ -560,7 +563,6 @@ a.active {
     background-color: #0056b3;
 }
 
-/* Reviews Section Styling */
 .reviews-container {
     max-width: 800px;
     margin: 2rem auto;
@@ -586,7 +588,6 @@ a.active {
     gap: 1rem;
 }
 
-/* Individual Review Card Styling */
 .review {
     display: block;
     justify-content: space-between;
@@ -603,7 +604,6 @@ a.active {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Review Content */
 .review h2 {
     margin: 0;
     color: var(--clr2);
@@ -618,7 +618,6 @@ a.active {
     display: block;
 }
 
-/* Delete Button Styling */
 button.red {
     background-color: #d9534f;
     color: #fff;
@@ -637,7 +636,14 @@ button.red:hover {
     transform: scale(1.1);
 }
 
-
+.add-books-google{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+.add-books-google input{
+    padding: 5px 13px;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
     .book-index {

@@ -14,7 +14,9 @@ export const bookService = {
     getEmptyBook,
     addReview,
     removeReview,
-    addGoogleBook
+    addGoogleBook,
+    getFilterFromSrcParams,
+    getBooksByCategory
 }
 
 async function query(filterBy = {}) {
@@ -61,7 +63,7 @@ async function query(filterBy = {}) {
 
 
     if (filterBy.minPrice && !isNaN(filterBy.minPrice)) {
-        books = books.filter((book) => book.listPrice.amount >= +filterBy.minPrice)
+        books = books.filter((book) => book.listPrice.amount >= +filterBy.ice)
     }
 
 
@@ -113,8 +115,10 @@ function save(book) {
 }
 function getDefaultFilter() {
     return { 
-        txt: '', // For filtering by title or subtitle
-        minPrice: 0, // For filtering books by minimum price
+        txt: '',
+        subtitle, 
+        description, 
+        minPrice: 0 , // For filtering books by minimum price
         maxPrice: Infinity // For filtering books by maximum price
     };
 }
@@ -197,6 +201,40 @@ export function removeReview(bookId, reviewId) {
         if (!book.reviews) return; // If no reviews, nothing to remove
         book.reviews = book.reviews.filter((review) => review.id !== reviewId); // Remove the review
         return save(book); // Save the updated book
+    });
+}
+
+function getFilterFromSrcParams(srcParams) {
+    const title = srcParams.get('title') || ''
+    const subtitle = srcParams.get('subtitle') || ''
+    const authors = srcParams.get('authors') || ''
+    const description = srcParams.get('description') || ''
+    const categories = srcParams.get('categories') || ''
+    const minPrice = srcParams.get('minPrice') || ''
+    const maxPrice = srcParams.get('maxPrice') || ''
+
+    return {
+        title,
+        subtitle,
+        authors,
+        description,
+        categories,
+        minPrice,
+        maxPrice
+    }
+
+}
+
+export function getBooksByCategory() {
+    return storageService.query(BOOK_KEY).then((books) => {
+        const categoryMap = {};
+        books.forEach((book) => {
+            book.categories.forEach((category) => {
+                if (!categoryMap[category]) categoryMap[category] = [];
+                categoryMap[category].push(book);
+            });
+        });
+        return categoryMap;
     });
 }
 

@@ -80,7 +80,7 @@ export function AddBook({onAddBook}){
        }
       
     return (
-        <div>
+        <div className="add-books-google">
           <h1 className="add-book-header">Add Books from Google</h1>
           <input
             type="text"
