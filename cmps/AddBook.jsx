@@ -2,6 +2,7 @@
 const { useState, useEffect } = React
 import { debounce } from "../services/util.service.js";
 import { bookService } from "../services/book.service.js";
+import '@fortawesome/fontawesome-free/css/all.css';
 
 export function AddBook({onAddBook}){
 
@@ -69,14 +70,18 @@ export function AddBook({onAddBook}){
                 alert(`Book "${googleBook.volumeInfo.title}" added successfully!`);
             })
             .catch((err) => {
-                console.error('Failed to add book:', err);
-                alert('Failed to add book. Please try again.');
-         });
-            }
+              if (err.message === 'Book is already in the database') {
+                  alert(`Book "${googleBook.volumeInfo.title}" is already in your collection.`);
+              } else {
+                  console.error('Failed to add book:', err);
+                  alert('Failed to add book. Please try again.');
+              }
+          });
+       }
       
     return (
         <div>
-          <h1>Add Books</h1>
+          <h1 className="add-book-header">Add Books from Google</h1>
           <input
             type="text"
             placeholder="Search for books"
@@ -84,15 +89,20 @@ export function AddBook({onAddBook}){
             onChange={handleInputChange}
           />
           {error && <p className="error">{error}</p>}
-          <ul>
-            {searchResults.map((book) => (
-                
-              <li key={book.id}>
-                <span>{book.volumeInfo.title}</span>
-                <button onClick={() => handleAddBook(book)}>+</button>
-              </li>
-            ))}
-          </ul>
+          <ul className="search-results">
+       {searchResults.map((book) => (
+        <li key={book.id} className="search-result-item">
+         <div className="book-info">
+        <span className="book-title">{book.volumeInfo.title}</span>
+        <i className="fas fa-plus-square" onClick={() => handleAddBook(book)} style={{ paddingLeft: '10px', cursor:"pointer" }}></i>
+         </div>
+        
+
+    </li>
+  ))}
+</ul>
+
         </div>
       );
 }
+

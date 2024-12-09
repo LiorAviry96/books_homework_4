@@ -63,7 +63,7 @@ if (!books) return <div>Loading...</div>
                 books={books}
                 onRemoveBook={onRemoveBook}
             />
-            <AddBook handleAddBook={onAddBook}/>
+            <AddBook onAddBook={onAddBook}/>
         </section>
     )
 }

@@ -171,17 +171,23 @@ export function addGoogleBook(googleBook){
     };
     console.log(formattedBook)
    // Retrieve existing books
-   return storageService.query(BOOK_KEY)
-   .then((books) => {
-       books = books || [];
-       books.push(formattedBook); // Append the new book
-       saveToStorage(BOOK_KEY, books); // Save the updated array
-       console.log('Book added successfully:', formattedBook);
-   })
-   .catch((err) => {
-       console.error('Failed to add book:', err);
-       throw err;
-   });
+   return storageService.query(BOOK_KEY).then((books) => {
+    books = books || [];
+    // Check if book already exists in the database
+    const isAlreadyAdded = books.some((book) => book.id === formattedBook.id);
+    if (isAlreadyAdded) {
+        console.log('Book already exists:', formattedBook.title);
+        return Promise.reject(new Error('Book is already in the database'));
+    }
+    // Add the new book
+    books.push(formattedBook);
+    saveToStorage(BOOK_KEY, books);
+    console.log('Book added successfully:', formattedBook);
+    return Promise.resolve();
+}).catch((err) => {
+    console.error('Failed to add book:', err);
+    throw err;
+});
     
 
 }

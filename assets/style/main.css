@@ -27,6 +27,10 @@
 body {
 	margin: 0;
 	color: var(--gray3);
+    font-family: "Atma", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    background-color: #dac8c8;
 }
 
 h1,
@@ -37,7 +41,9 @@ h5,
 h6,
 p {
 	margin: .5em 0 .5em;
-	font-family: 'Edu VIC WA NT Beginner', cursive;
+    font-family: "Atma", system-ui;
+    font-weight: 400;
+    font-style: normal;
 }
 
 p {
@@ -78,16 +84,40 @@ object {
 	font-size: 25px;
 }
 
-button {
-	cursor: pointer;
-	background-color: var(--clr2bg);
-	margin: 0.5em;
-	border: 0;
-	padding: 5px 20px;
-	border-radius: 4px;
-	font-size: 15px;
-	font-family: 'Edu VIC WA NT Beginner', cursive;
 
+button {
+    flex: 1; /* Makes buttons take equal width */
+    padding: 0.6rem 1.2rem; /* Adjust padding for better button consistency */
+    margin: 0.5em;
+    background-color: rgb(103, 48, 73);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 15px;
+    font-family: "Atma", system-ui;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.book-list li section {
+    display: flex;
+    flex-direction: column;  /* Stack the content vertically */
+}
+
+.book-list li section div {
+    display: flex;  /* Make the first two buttons align horizontally */
+    gap: 10px;  /* Optional: Adds space between buttons */
+}
+
+.book-list li section button {
+    margin: 5px 0;  /* Optional: Adds vertical spacing for the "Edit" button */
+}
+
+button:hover{
+    background-color: rgb(177, 107, 139);
+    color: #fff;
+    transform: scale(1.05);
 }
 
 .book-index{
@@ -113,18 +143,19 @@ button {
 }
 
 .book-index a:hover {
-    background-color: #007bff;
+	background-color: rgb(177, 107, 139);
     color: #fff;
 }
 
 .book-index a {
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
     padding: 0.5rem 1rem;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
 
 }
+
 .book-edit label{
 	display: block;
 }
@@ -139,7 +170,11 @@ button {
     gap: 1rem;
     padding: 1rem 0;
 }
-/* General styles for BookDetails */
+.book-list section {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem; /* Adds space between buttons */
+}
 .book-details {
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -204,7 +239,7 @@ button {
 
 /* Buttons */
 .book-details button {
-    background-color: #007bff;
+	background-color: rgb(103, 48, 73);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -216,15 +251,15 @@ button {
 }
 
 .book-details button:hover {
-    background-color: #0056b3;
+	background-color: rgb(177, 107, 139);
     transform: scale(1.05);
 }
 
-.book-details button a {
-    color: #fff;
+
+button a {
+    color: white;
     text-decoration: none;
 }
-
 /* Navigation section */
 .book-details section {
     display: block;
@@ -286,10 +321,13 @@ button {
     font-weight: bold;
 }
 
-
+.add-book-header{
+    font-size: 25px;
+    font-weight: bold;
+}
 
 button:hover {
-	background-color: var(--clr2);
+	background-color: rgb(177, 107, 139);
 	color: white;
 	transition: 0.3s;
 }
@@ -303,8 +341,9 @@ input:focus {
 }
 
 label{
-	font-family: 'Edu VIC WA NT Beginner', cursive;
-	font-size: 20px;
+    font-family: "Atma", system-ui;
+    font-style: normal;
+    	font-size: 20px;
 	padding-right: 10px;
 	padding-left: 5px;
 	font-weight: bold;
@@ -313,6 +352,35 @@ label{
 	font-size: 30px;
 	padding-top: 10px;
 }
+.book-filter form {
+    display: grid;
+    grid-template-columns: 0.4fr 2fr; /* Two columns, labels and inputs */
+    gap: 10px;  /* Space between the columns */
+    align-items: center; /* Vertically align the items */
+}
+
+.book-filter label {
+    font-family: "Atma", system-ui;
+    font-style: normal;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.book-filter input {
+    font-size: 18px;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+.book-filter div {
+    display: contents; /* Ensures both label and input share the same grid cell */
+}
+
+.book-filter button {
+    grid-column: span 2; /* Make the button span across both columns */
+    justify-self: center; /* Center the button */
+}
+
 .flex {
 	display: flex;
 }
@@ -350,8 +418,9 @@ label{
 /* font awsome */
 
 .fa {
-	font-family: fa;
-}
+    font-family: "Atma", system-ui;
+    font-weight: 400;
+    font-style: normal;}
 
 .fa.fa-facebook::before {
 	content: "\f39e";
@@ -398,7 +467,8 @@ label{
 }
 
 .app-header {
-	background-color: var(--clr1);
+	background-color:rgb(94, 54, 72);
+    ;
 	color: var(--clr2bg-light);
 
 }
@@ -478,7 +548,7 @@ a.active {
 .add-review-container form button {
     align-self: center;
     padding: 0.7rem 1.5rem;
-    background-color: #007bff;
+	background-color: rgb(103, 48, 73);
     color: white;
     border: none;
     border-radius: 5px;
@@ -498,7 +568,9 @@ a.active {
     background-color: var(--clr1bg-light);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: 'Edu VIC WA NT Beginner', cursive;
+    font-family: "Atma", system-ui;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .reviews-container h2 {
