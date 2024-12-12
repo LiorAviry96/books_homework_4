@@ -9,21 +9,22 @@ export function BookEdit() {
 
     const [bookToEdit, setBookToEdit] = useState(bookService.getEmptyBook())
     const navigate = useNavigate();
-    const params = useParams();
-    const bookId = params.bookid;
+    const { bookId } = useParams();
 
 
     useEffect(() => {
         if (bookId) {
-            loadBook(bookId);
+            loadBook();
         }
+        //console.log('Fetched book:', bookToEdit);
+
     }, [bookId]);
 
 
 
-    function loadBook(bookid) {
-        bookService.get(bookid).then((myBook) => {
-            setBook({
+    function loadBook() {
+        bookService.get(bookId).then((myBook) => {
+            setBookToEdit({
                 ...myBook,
                 authors: myBook.authors.join(', '),
                 categories: myBook.categories.join(', '),

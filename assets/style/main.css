@@ -103,6 +103,7 @@ button {
 .book-list li section {
     display: flex;
     flex-direction: column;  /* Stack the content vertically */
+
 }
 
 .book-list li section div {
@@ -260,7 +261,6 @@ button a {
     color: white;
     text-decoration: none;
 }
-/* Navigation section */
 .book-details section {
     display: block;
     justify-content: space-between;
@@ -273,9 +273,6 @@ button a {
 }
 
 
-
-
-/* Individual BookPreview styles */
 .book-preview {
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -300,24 +297,29 @@ button a {
     height: auto;
     border-bottom: 1px solid #ddd;
 }
+
+.book-preview img:hover {
+    transform: scale(1.10) rotateZ(1deg);
+    transition: transform 0.6s ease-out;
+}
 .book-index .add-button {
     display: flex;
-    justify-content: center; /* Centers the button horizontally */
+    justify-content: center; 
     margin-bottom: 1rem;
 }
 
 .button-add {
-    padding: 10px 20px; /* Adjust padding for consistent size */
+    padding: 10px 25px !important; 
     background-color: rgb(103, 48, 73);
-    color: white; /* Optional: Button text color */
-    border-radius: 5px; /* Rounded corners */
-    text-align: center; /* Centers text inside the button */
+    color: white; 
+    border-radius: 5px; 
+    text-align: center; 
 
 }
 /* Price styles */
 .book-preview .price-high {
     color: red;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .book-preview .price-low {
@@ -643,6 +645,20 @@ button.red:hover {
 }
 .add-books-google input{
     padding: 5px 13px;
+}
+.star {
+    color: gray;
+    transition: color 0.3s;
+}
+.star.filled {
+    color: gold;
+}
+
+.show-txt-btn{
+    font-size: 12px !important;
+    font-weight: 400px !important;
+    padding: 8px 8px !important;
+    margin: 0px !important;
 }
 /* Responsive Design */
 @media (max-width: 768px) {

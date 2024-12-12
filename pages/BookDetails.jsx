@@ -52,8 +52,8 @@ export function BookDetails() {
     }
     const getReadingLevel = () => {
         if (book.pageCount > 500) return 'Serious Reading';
-        if (book.pageCount > 200) return 'Descent Reading';
-        if (book.pageCount < 100) return 'Light Reading';
+        if (book.pageCount > 100) return 'Descent Reading';
+        if (book.pageCount <= 100) return 'Light Reading';
         return ''; 
     };
 
@@ -83,14 +83,13 @@ export function BookDetails() {
            <h2>Title: {book.title}</h2>
            <h4>Description: <LongTxt txt={book.description} /></h4>
          <h4>
-            <span>Price:{book.listPrice.currencyCode} {book.listPrice.amount}</span>
+            <span>Price: {book.listPrice.amount} {book.listPrice.currencyCode}</span>
          <span className="sale">
                     {isOnSale()}
                 </span>
          </h4>
          <h4>Page Count: {book.pageCount}</h4>
-         <h4>Page Count: {book.pageCount}</h4>
-            <h4>Reading Level: {getReadingLevel()}</h4>
+         <h4>Level: {getReadingLevel()}</h4>
             <h4>Publish Date: {book.publishedDate}</h4>
             <h4>Book Age: {getBookAgeCategory()}</h4>
             

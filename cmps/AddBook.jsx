@@ -81,6 +81,7 @@ export function AddBook({onAddBook}){
       
     return (
         <div className="add-books-google">
+          <form>
           <h1 className="add-book-header">Add Books from Google</h1>
           <input
             type="text"
@@ -88,6 +89,8 @@ export function AddBook({onAddBook}){
             value={searchTerm}
             onChange={handleInputChange}
           />
+          </form>
+        
           {error && <p className="error">{error}</p>}
           <ul className="search-results">
        {searchResults.map((book) => (

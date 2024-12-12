@@ -291,6 +291,54 @@ function _createBooks() {
                 "he",
                 { amount: 174, currencyCode: "ILS", isOnSale: false }
             ),
+            _createBook(
+                "curabitur purus",
+                "posuere augue nisi",
+                ["Agatha Christie"],
+                2015,
+                "suspendisse potenti integer ut inceptos sagittis non consectetur augue class fringilla magna",
+                324,
+                ["Mystery", "Thriller"],
+                "5",
+                "en",
+                { amount: 95, currencyCode: "USD", isOnSale: true }
+            ),
+            _createBook(
+                "dictum orci",
+                "mauris sapien suscipit",
+                ["Isaac Asimov"],
+                1988,
+                "mattis venenatis vehicula tortor felis convallis scelerisque volutpat fringilla etiam sed quisque mi habitant senectus",
+                501,
+                ["Science Fiction", "Technology"],
+                "6",
+                "fr",
+                { amount: 150, currencyCode: "EUR", isOnSale: false }
+            ),
+            _createBook(
+                "eleifend ultricies",
+                "velit tristique gravida",
+                ["J.K. Rowling"],
+                2010,
+                "elementum hac sodales platea eget felis fringilla praesent vel volutpat dictum interdum laoreet tempor",
+                672,
+                ["Fantasy", "Adventure"],
+                "7",
+                "en",
+                { amount: 220, currencyCode: "GBP", isOnSale: true }
+            ),
+            _createBook(
+                "placerat sapien",
+                "nisi nulla aliquet",
+                ["George Orwell"],
+                1949,
+                "dapibus torquent ornare vehicula aenean libero lacinia est facilisi varius habitasse aliquam curabitur",
+                328,
+                ["Dystopia", "Politics"],
+                "8",
+                "en",
+                { amount: 80, currencyCode: "USD", isOnSale: false }
+            ),
         ];
         saveToStorage(BOOK_KEY, books);
     }
