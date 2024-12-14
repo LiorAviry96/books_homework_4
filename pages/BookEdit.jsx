@@ -16,24 +16,32 @@ export function BookEdit() {
         if (bookId) {
             loadBook();
         }
-        //console.log('Fetched book:', bookToEdit);
+        console.log('Fetched book:', bookId);
 
-    }, [bookId]);
+    }, []);
 
 
 
     function loadBook() {
-        bookService.get(bookId).then((myBook) => {
+        bookService.get(bookId)
+        .then((myBook) => {
+            console.log('myBook', myBook)
+            console.log('authors', myBook.authors);
+            console.log('categories', myBook.categories);
             setBookToEdit({
                 ...myBook,
-                authors: myBook.authors.join(', '),
-                categories: myBook.categories.join(', '),
-            }).catch(err => {
-                console.log('Problem getting book', err);
-                showErrorMsg('Problem getting book')
-            })
+                authors: [...myBook.authors], // Ensure it's an array
+            categories: [...myBook.categories], // Ensure it's an array
+            });
+        })
+        .catch((err) => {
+            console.log('Problem getting book', err);
+            showErrorMsg('Problem getting book');
         });
+      
     }
+ 
+
 
 
     function handleChange({ target }) {
@@ -73,6 +81,7 @@ export function BookEdit() {
             [field]: value,
         }));
     }
+    
     
     function onSaveBook(ev) {
         ev.preventDefault()
@@ -137,7 +146,7 @@ export function BookEdit() {
                 <label htmlFor="categories">Categories (comma-separated)</label>
                 <input
                     onChange={(event) => handleArrayChange(event, "categories")}
-                    value={categories.join(", ")}
+                    value={categories ? categories.join(", ") : ""}
                     type="text"
                     name="categories"
                     id="categories"

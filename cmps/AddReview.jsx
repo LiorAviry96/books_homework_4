@@ -1,51 +1,85 @@
-const { useState } = React
+import { RateBySelect } from './dynamic-inputs/RateBySelect.jsx'
+import { RateByStars } from './dynamic-inputs/RateByStars.jsx'
+import { RateByTextbox } from './dynamic-inputs/RateByTextbox.jsx'
+import { bookService } from '../services/book.service.js'
+import { NumberInputRating } from './dynamic-inputs/NumberInputRating.jsx'
+const { useState, useRef, useEffect } = React
 
-export function AddReview({addReview, bookId}) {
-    const [review, setReview] = useState({ fullName: '', rate: '',date: '', bookId });
-    const [cmpType, setCmpType] = useState('RateBySelect')
+export function AddReview({addReview}) {
+    const inputRef = useRef()
 
+    const [review, setReview] = useState(bookService.getEmptyReview());
+    const [cmpType, setCmpType] = useState('stars')
+    const { fullName, date, txt, rating } = review
+
+    useEffect(() => {
+        inputRef.current.focus()
+    }, [])
     function handleChange({ target }) {
-        const { name, value } = target;
-        setReview(prevReview => ({ ...prevReview, [name]: value }));
+        const { value, name: field } = target;
+        setReview(prevReview => ({ ...prevReview, [field]: value }));
     }
     
     function submitReview(ev) {
         ev.preventDefault();
-        console.log('review', review);
+        //console.log('review', review);
         addReview(review); // Pass only the review object
     }
-    function handleGreetClick(value) {
-        console.log(`${value} \nClicked!`)
-    }
+
     return (
         <section className="add-review-container">
             <h1 className="add-review-header">Add a Review</h1>
             <form onSubmit={submitReview}>
-                <label>
+                <div>
+                <label  htmlFor="fullName">
                     Full Name
                 </label>
                 <input
                  type="text"
+                 id='fullname'
                   name="fullName"
-                  value={review.fullName}
+                  ref={inputRef}
+                  value={fullName}
                  onChange={handleChange}
                 />
-                 <DynamicCmp  cmpType={cmpType}
-                    review={review}
-                    setReview={setReview}
-                    handleChange={handleChange} // Pass this explicitly
-                    handleClick={handleGreetClick}/>
-
-                <label>
-                    Read At:
-                </label>
+                   <label htmlFor='date'>Date:</label>
                 <input
-                   type="date"
-                  name="date"
-                  value={review.date}
-                  onChange={handleChange}
-                />
+                    type='date'
+                    id='date'
+                    name='date'
+                    value={date}
+                    onChange={handleChange}  />
+                
+                <div>
+                        <p>Select rating type:</p>
+                        <input name='rating'
+                            onChange={(ev) => setCmpType(ev.target.value)}
+                            id='select'
+                            defaultChecked={cmpType === 'select'}
+                            type="radio"
+                            value='select' />
+                        <label htmlFor="select">Select</label>
+                        <input name='rating'
+                            onChange={(ev) => setCmpType(ev.target.value)}
+                            id='stars'
+                            type="radio"
+                            defaultChecked={cmpType === 'stars'}
+                            value='stars' />
+                        <label htmlFor="stars">Stars</label>
+                        <input name='rating'
+                            onChange={(ev) => setCmpType(ev.target.value)}
+                            id='number'
+                            type="radio"
+                            defaultChecked={cmpType === 'number'}
+                            value='number' />
+                        <label htmlFor="number">Number</label>
+                    </div>
+                 <DynamicCmp  type={cmpType} handleChange={handleChange} rating={rating}/>
+                 <RateByTextbox handleChange={handleChange} txt={txt} />
+
+             
                     <button>Submit</button>
+                    </div>
             </form>
 
         </section>
@@ -53,13 +87,13 @@ export function AddReview({addReview, bookId}) {
 }
 
 
-function DynamicCmp({ cmpType, ...restOfProps }) {
-    switch (cmpType) {
-        case 'RateBySelect':
+function DynamicCmp({ type, ...restOfProps }) {
+    switch (type) {
+        case 'select':
             return <RateBySelect {...restOfProps} />
-        case 'RateByTextbox':
-            return <RateByTextbox {...restOfProps} />
-        case 'RateByStars':
+        case 'number':
+            return <NumberInputRating {...restOfProps} />
+        case 'stars':
             return <RateByStars {...restOfProps} />
     }
 
@@ -67,67 +101,8 @@ function DynamicCmp({ cmpType, ...restOfProps }) {
 
 }
 
-//* About Dynamic Cmps
-function RateBySelect({ review, handleChange }) {
-    
-    return (
-       <div>
-               <label>
-                  Rating
-                </label>
-                <select
-                    name="rate"
-                    value={review.rate}
-                    onChange={handleChange}
-                >
-                    <option value="" disabled>Select Rating</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                 </select>
-       </div>
-    )
-}
 
-function RateByTextbox({ review, handleChange }) {
-    return (
-        <div>
-        <label>
-             Rating
-            </label>
-               <input
-            type="number"
-            name="rate"
-            value={review.rate}
-            onChange={handleChange}
-            min="1"
-            max="5"
-            placeholder="Enter rating (1-5)"
-        />
-      </div>
-    )
-}
 
-function RateByStars({ review, setReview }) {
-    return (
-     <div>
-     <label>
-      Rating
-     </label>
-    <div className="star-rating">
-    {[1, 2, 3, 4, 5].map(star => (
-        <span
-            key={star}
-            className={`star ${star <= review.rate ? 'filled' : ''}`}
-            onClick={() => setReview(prevReview => ({ ...prevReview, rate: star }))}
-            style={{ cursor: 'pointer', fontSize: '24px' }}
-        >
-            ★
-        </span>
-    ))}
-    </div>
-    </div>
-    )
-}
+
+
+

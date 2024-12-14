@@ -1,8 +1,12 @@
 import { loadFromStorage, makeId, saveToStorage } from './util.service.js'
 import { storageService } from './async-storage.service.js'
+import { utilService } from './util.service.js'
 
 
 const BOOK_KEY = 'bookDB'
+const CACHE_STORAGE_KEY = 'googleBooksCache'
+const gCache = utilService.loadFromStorage(CACHE_STORAGE_KEY) || {}
+
 _createBooks()
 
 export const bookService = {
@@ -14,9 +18,11 @@ export const bookService = {
     getEmptyBook,
     addReview,
     removeReview,
-    addGoogleBook,
+    saveGoogleBook,
+    searchGoogleBook,
     getFilterFromSrcParams,
-    getBooksByCategory
+    getBooksByCategory,
+    getEmptyReview
 }
 
 async function query(filterBy = {}) {
@@ -63,7 +69,7 @@ async function query(filterBy = {}) {
 
 
     if (filterBy.minPrice && !isNaN(filterBy.minPrice)) {
-        books = books.filter((book) => book.listPrice.amount >= +filterBy.ice)
+        books = books.filter((book) => book.listPrice.amount >= +filterBy.minPrice);
     }
 
 
@@ -89,11 +95,12 @@ function remove(bookId) {
     return storageService.remove(BOOK_KEY, bookId)
 }
 
-function get(bookId) {
+async function get(bookId) {
     return storageService.get(BOOK_KEY, bookId)
         .then(_setNextPrevBookId)
       
 }
+
 
 function _setNextPrevBookId(book) {
     return query().then((books) => {
@@ -153,7 +160,7 @@ export function addReview(bookId, review) {
 }
 
 
-export function addGoogleBook(googleBook){
+/*export function saveGoogleBook(googleBook){
     console.log('start adding')
     const formattedBook = {
         id: googleBook.id,
@@ -194,6 +201,65 @@ export function addGoogleBook(googleBook){
 });
     
 
+}*/
+
+function searchGoogleBook(bookName) {
+    if (!bookName) return Promise.resolve();
+
+    // Check cache
+    const cachedData = gCache[bookName] || {};
+    const { data: googleBooks, lastFetched = 0 } = cachedData;
+    const isFetchStillValid = (Date.now() - lastFetched) < 60000;
+
+    if (googleBooks && isFetchStillValid) {
+        console.log('Data from cache...', googleBooks);
+        return Promise.resolve(googleBooks);
+    }
+
+    // Fetch data using the Fetch API
+    const url = `https://www.googleapis.com/books/v1/volumes?printType=books&q=${encodeURIComponent(bookName)}`;
+    
+    return fetch(url)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json(); // Parse the response JSON
+        })
+        .then(data => {
+            const books = _formatGoogleBooks(data.items || []);
+            console.log('Data from network...', books);
+
+            // Save to cache
+            _saveDataToCache(bookName, books);
+
+            return books;
+        })
+        .catch(err => {
+            console.error('Failed to fetch books:', err);
+            throw err; // Rethrow the error for the caller to handle
+        });
+}
+
+
+function _saveDataToCache(key, data) {
+    gCache[key] = {
+        data,
+        lastFetched: Date.now()
+    }
+    utilService.saveToStorage(CACHE_STORAGE_KEY, gCache)
+}
+
+
+
+function saveGoogleBook(book) {
+    return storageService.post(BOOK_KEY, book, { isCheckExist: true })
+        .catch(err => {
+            if (err && err.isExist) {
+                console.error(`"${book.title}" already in shop!`);
+            }
+            throw err
+        })
 }
 
 export function removeReview(bookId, reviewId) {
@@ -224,6 +290,15 @@ function getFilterFromSrcParams(srcParams) {
     }
 
 }
+function getEmptyReview() {
+    return {
+        fullName: 'new name',
+        rating: 0,
+        date: new Date().toISOString().slice(0, 10),
+        txt: '',
+        selected: 0,
+    }
+}
 
 export function getBooksByCategory() {
     return storageService.query(BOOK_KEY).then((books) => {
@@ -238,6 +313,30 @@ export function getBooksByCategory() {
     });
 }
 
+
+function _formatGoogleBooks(googleBooks) {
+    return googleBooks.map(googleBook => {
+        const { volumeInfo } = googleBook
+        const book = {
+            id: googleBook.id,
+            title: volumeInfo.title,
+            description: volumeInfo.description,
+            pageCount: volumeInfo.pageCount,
+            authors: volumeInfo.authors,
+            categories: volumeInfo.categories,
+            publishedDate: volumeInfo.publishedDate,
+            language: volumeInfo.language,
+            listPrice: {
+                amount: utilService.getRandomIntInclusive(80, 500),
+                currencyCode: "EUR",
+                isOnSale: Math.random() > 0.7
+            },
+            reviews: []
+        }
+        if (volumeInfo.imageLinks) book.thumbnail = volumeInfo.imageLinks.thumbnail
+        return book
+    })
+}
 
 function _createBooks() {
     let books = loadFromStorage(BOOK_KEY);
@@ -344,7 +443,7 @@ function _createBooks() {
     }
 }
 
-function _createBook(title, subtitle, authors, publishedDate, description, pageCount, categorie, thumbnail, language, listPrice) {
+function _createBook(title, subtitle, authors, publishedDate, description, pageCount, categories, thumbnail, language, listPrice) {
     const book = {
         id: makeId(),
         title,
@@ -353,7 +452,7 @@ function _createBook(title, subtitle, authors, publishedDate, description, pageC
         publishedDate,
         description,
         pageCount,
-        categorie,
+        categories,
         thumbnail,
         language,
         listPrice,

@@ -1,51 +1,34 @@
 
-const { useState, useEffect } = React
 import { debounce } from "../services/util.service.js";
 import { bookService } from "../services/book.service.js";
+import { showErrorMsg , showSuccessMsg} from "../services//event-bus.service.js";
+import { SearchBooksList } from "./SearchBooksList.jsx";
 import '@fortawesome/fontawesome-free/css/all.css';
 
-export function AddBook({onAddBook}){
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
-    const [error, setError] = useState('');
+const { useState, useRef } = React
+const { useNavigate } = ReactRouter
 
-    useEffect(() => {
-      // Debounce search term handling
-      const debouncedSearch = debounce((term) => {
-        if (!term) {
-          setSearchResults([]);
-          return;
-        }
-        fetchBooks(term);
-      }, 500);
-  
-      debouncedSearch(searchTerm);
-    }, [searchTerm]);
+export function AddBook(){
 
-  async function fetchBooks(query) {
-    try {
-        const response = await fetch(
-            `https://www.googleapis.com/books/v1/volumes?printType=books&q=${encodeURIComponent(query)}`
-        );
-        if (!response.ok) throw new Error('Failed to fetch books');
-        const data = await response.json();
-        setSearchResults(data.items || []);
-    } catch (err) {
-        setError('Failed to fetch books. Please try again.');
-        console.error(err);
-    }
-}
+  const [booksList, setBooksList] = useState()
+
+  const navigate = useNavigate()
+  const handleSearchDebounce = useRef(debounce(handleSearch, 2000)).current
 
 
     
-    function handleInputChange(event) {
-        setSearchTerm(event.target.value);
+    function handleSearch({ target }) {
+
+      bookService.searchGoogleBook(target.value)
+            .then(res => setBooksList(res))
+            .catch(() => showErrorMsg('Cannot get google books'))
+
       }
 
-      function handleAddBook(googleBook) {
+      /*function handleAddBook(googleBook) {
         bookService
-            .addGoogleBook(googleBook)
+            .saveGoogleBook(googleBook)
             .then(() => {
                 const formattedBook = {
                     id: googleBook.id,
@@ -77,7 +60,16 @@ export function AddBook({onAddBook}){
                   alert('Failed to add book. Please try again.');
               }
           });
-       }
+       }*/
+
+        function handleAddGoogleBook(book) {
+          console.log(book)
+          console.log('start saving')
+            bookService.saveGoogleBook(book)
+                .then(() => showSuccessMsg('Book has successfully saved!'))
+                .catch(() => showErrorMsg(`couldn't save book`))
+                .finally(() => navigate('/book'))
+        }
       
     return (
         <div className="add-books-google">
@@ -86,24 +78,13 @@ export function AddBook({onAddBook}){
           <input
             type="text"
             placeholder="Search for books"
-            value={searchTerm}
-            onChange={handleInputChange}
+            name='title'
+            onChange={handleSearchDebounce}
           />
           </form>
         
-          {error && <p className="error">{error}</p>}
-          <ul className="search-results">
-       {searchResults.map((book) => (
-        <li key={book.id} className="search-result-item">
-         <div className="book-info">
-        <span className="book-title">{book.volumeInfo.title}</span>
-        <i className="fas fa-plus-square" onClick={() => handleAddBook(book)} style={{ paddingLeft: '10px', cursor:"pointer" }}></i>
-         </div>
-        
+          {booksList && <SearchBooksList booksList={booksList} handleAddGoogleBook={handleAddGoogleBook} />}
 
-    </li>
-  ))}
-</ul>
 
         </div>
       );

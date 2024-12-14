@@ -10,7 +10,7 @@ export function Reviews({ reviews, removeReview }) {
                 <h2>Reviews</h2>
                 {reviews ? reviews.map((review) => {
                     return (
-                        <div key={review.date} className="review" >
+                        <div key={review.fullName} className="review" >
                             <h2>Name: {review.fullName}</h2>
                             <p>Rate: {review.rate}</p>
                             <p>Date: {review.date}</p>
